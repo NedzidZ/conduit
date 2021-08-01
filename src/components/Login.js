@@ -6,24 +6,24 @@ const Login = () => {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
 
-  const emailInputHandler = (event) => {
-    setEnteredEmail(event.target.value);
-  };
-  const passwordInputHandler = (event) => {
+  const emailInputHandler = (event) => setEnteredEmail(event.target.value);
+
+  const passwordInputHandler = (event) =>
     setEnteredPassword(event.target.value);
-  };
-  let user = {};
+
   const LoginFormHandler = (event) => {
     event.preventDefault();
+
     const data = {
       user: {
         email: enteredEmail,
         password: enteredPassword,
       },
     };
+
     fetch("https://conduit.productionready.io/api/users/login", {
       method: "POST",
-      mode: "no-cors",
+      mode: "cors",
       headers: {
         "Content-type": "application/json",
       },
@@ -37,6 +37,7 @@ const Login = () => {
         console.error("Error:", error);
       });
   };
+
   return (
     <div className={classes.logindiv}>
       <form onSubmit={LoginFormHandler} className={classes.form}>
