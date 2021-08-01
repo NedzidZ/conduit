@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classes from "./Login.module.css";
+import Loading from "./Loading.js";
 
 const Login = () => {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const emailInputHandler = (event) => setEnteredEmail(event.target.value);
 
@@ -21,6 +23,7 @@ const Login = () => {
       },
     };
 
+    setIsLoading(true);
     fetch("https://conduit.productionready.io/api/users/login", {
       method: "POST",
       mode: "cors",
@@ -31,12 +34,17 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        setIsLoading(false);
         console.log("Success:", data);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className={classes.logindiv}>
@@ -61,7 +69,9 @@ const Login = () => {
           type="password"
           placeholder="Password"
         />
-        <button className={classes.btnlogin}>Sign in</button>
+        <button onClick={LoginFormHandler} className={classes.btnlogin}>
+          Sign in
+        </button>
       </form>
     </div>
   );
